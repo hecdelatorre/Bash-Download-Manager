@@ -60,11 +60,12 @@ for ((i=0; i<count; i++)); do
   done
 done
 
-
 # Download the files using aria2c and record the start time and end time of each download
 start_time=$(date +%s)
 
-for link in "${links[@]}"; do
+for ((i=0; i<count; i++)); do
+  link="${links[$i]}"
+  echo "Downloading file $((i + 1)) of $count..."
   aria2c "$link" -d "$directory" --seed-time=0
 done
 
