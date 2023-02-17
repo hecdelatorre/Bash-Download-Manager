@@ -2,15 +2,30 @@
 
 # Function to ask the user for the number of downloads
 get_download_count() {
-  read -p "How many downloads do you want to perform? " count
+  while true; do
+    read -p "How many downloads do you want to perform? " count
+
+    if [[ "$count" =~ ^[1-9][0-9]*$ ]]; then
+      break
+    fi
+
+    echo "Invalid input. Please enter a positive number."
+  done
 }
 
 # Function to ask the user for the download directory and validate it
 get_download_directory() {
   while true; do
-    read -p "Enter the download directory: " directory
+    read -p "Enter the download directory (default: ~/Downloads/): " input_directory
 
-    if [ -d "$directory" ]; then
+    # If the user did not provide a directory, use the default
+    if [ -z "$input_directory" ]; then
+      directory="$HOME/Downloads"
+      break
+    fi
+
+    if [ -d "$input_directory" ]; then
+      directory="$input_directory"
       break
     fi
 
@@ -64,11 +79,11 @@ get_links() {
 # Function to download the files using aria2c and record the download time
 download_files() {
   start_time=$(date +%s)
-
+  echo -e "\n"
   for ((i=0; i<count; i++)); do
     link="${links[$i]}"
-    echo -e "\nDownloading file $((i + 1)) of $count...\n"
-    aria2c "$link" -d "$directory" --seed-time=0
+    echo "Downloading file $((i + 1)) of $count..."
+    aria2c "$link" -d "$directory" --seed-time=0 > /dev/null 2>&1
   done
 
   end_time=$(date +%s)
@@ -77,7 +92,7 @@ download_files() {
 
 # Function to display a summary of the downloaded files and the download time
 show_summary() {
-  echo "Downloads complete."
+  echo -e "\nDownloads complete."
   echo "Downloaded files are stored in $directory."
   echo "Download time: $total_time seconds."
 }
