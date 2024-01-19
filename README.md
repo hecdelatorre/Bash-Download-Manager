@@ -1,3 +1,4 @@
+
 #  Bash Download Manager
 
 This project is a command-line tool for downloading files from the internet using the Aria2c download utility. It allows the user to specify the number of downloads, the download directory, and the links to the files to download.
@@ -6,10 +7,43 @@ This project is a command-line tool for downloading files from the internet usin
 
 To use this tool, follow these steps:
 
-1. Clone the repository to your local machine
-2. Make sure Aria2c is installed on your system
-3. Open a terminal window and navigate to the project directory
-4. Run the command `./index.sh` to start the tool
+1. Clone the repository to your local machine.
+    ```bash
+    git clone https://gitlab.com/hecdelatorre/bash-download-manager.git
+    ```
+
+2. Install Aria2c on your system:
+
+   - **Debian:**
+     ```bash
+     sudo apt-get update
+     sudo apt-get install aria2
+     ```
+
+   - **Fedora:**
+     ```bash
+     sudo dnf install aria2
+     ```
+
+   - **Arch:**
+     ```bash
+     sudo pacman -S aria2
+     ```
+
+3. Make the script executable:
+    ```bash
+    chmod +x index.sh
+    ```
+
+4. Run the script:
+    ```bash
+    ./index.sh
+    ```
+
+   Alternatively, you can run the script without cloning the repository using:
+   ```bash
+   bash -c "$(curl -fsSL https://gitlab.com/hecdelatorre/bash-download-manager/-/raw/main/index.sh)"
+   ```
 
 ## Usage
 
@@ -28,4 +62,5 @@ If you would like to contribute to this project, please submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
