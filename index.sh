@@ -76,15 +76,18 @@ get_links() {
   done
 }
 
-# Function to download the files using aria2c and record the download time
+# Function to download the files using aria2c in the background and record the download time
 download_files() {
   start_time=$(date +%s)
   echo -e "\n"
   for ((i=0; i<count; i++)); do
     link="${links[$i]}"
-    echo "Downloading file $((i + 1)) of $count..."
-    aria2c "$link" -d "$directory" --seed-time=0 > /dev/null 2>&1
+    echo "Downloading file $((i + 1)) of $count in the background..."
+    aria2c "$link" -d "$directory" --seed-time=0 > /dev/null 2>&1 &
   done
+
+  # Wait for all background downloads to finish
+  wait
 
   end_time=$(date +%s)
   total_time=$((end_time - start_time))
