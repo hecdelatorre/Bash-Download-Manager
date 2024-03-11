@@ -31,6 +31,8 @@ get_download_directory() {
 
     echo "Invalid directory. Please enter a valid directory."
   done
+
+  cd "$directory" || exit
 }
 
 # Function to ask the user if they want to create a new folder and get the folder name
@@ -76,6 +78,16 @@ get_links() {
   done
 }
 
+# Function to display elapsed time while downloads are in progress
+display_elapsed_time() {
+  local elapsed=0
+  while [ "$(jobs -r | wc -l)" -gt 0 ]; do
+    sleep 1
+    elapsed=$((elapsed + 1))
+    printf "\rElapsed time: %02d:%02d:%02d" $((elapsed/3600)) $((elapsed%3600/60)) $((elapsed%60))
+  done
+}
+
 # Function to download the files using aria2c in the background and record the download time
 download_files() {
   start_time=$(date +%s)
@@ -85,6 +97,9 @@ download_files() {
     echo "Downloading file $((i + 1)) of $count in the background..."
     aria2c "$link" -d "$directory" --seed-time=0 > /dev/null 2>&1 &
   done
+
+  # Display elapsed time while downloads are in progress
+  display_elapsed_time
 
   # Wait for all background downloads to finish
   wait
